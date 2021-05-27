@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1>Hello Web Workers!</h1>
+        <h3>Need the fallowing </h3>
+        <ul>
+            <li>Need Server (http-server)  to run web workers
+                <ul>
+                    <li>start server from cmd prompt </li>
+                    <li>got to root folder and start http-server with <b><code>http-server</code></b></li>
+                    <li> You will get message like 
+                        <b>                        
+                            <code>
+                            Starting up http-server, serving ./
+                            Available on:
+                            http://192.168.1.4:8080
+                            http://127.0.0.1:8080
+                            </code>
+                        </b>
+
+                    </li>
+                </ul>
+            </li>
+            <li>connect to workers and post a event </li>
+        </ul>
+
+        <script>
+            const dw =  new Worker('./dedicatedWorker.js');
+            const userData = {
+                name:'Srikanth',
+
+            };
+            console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            dw.postMessage(userData, {userData});
+            console.log('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+            userData.name="Srinivas"
+            dw.addEventListener('message', function(e){
+                console.log('>>>>>>>>>', e.data)
+            })
+        </script>
+
+
+        <script>
+            // Shared workers
+            const sw = new SharedWorker('./sharedWorkers.js');
+            sw.port.postMessage('Posted message from Shared workers ');
+
+            sw.port.start();
+            sw.port.addEventListener('message', function(e){
+                console.log('Shared workers  message  received from worker', e.data)
+            })
+
+        </script>
+    </body>
+</html>
